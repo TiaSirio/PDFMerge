@@ -17,6 +17,7 @@ from PIL import Image
 from docx2pdf import convert
 from fpdf import FPDF
 import os
+```
 
 ## Usage
 To use PDFMerge, run the main.py script. If the libraries are installed in a venv, follow the instruction in the file "execute.txt".
