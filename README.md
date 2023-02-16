@@ -19,6 +19,13 @@ from fpdf import FPDF
 import os
 ```
 
+Installation
+To install the required libraries, run the following command:
+
+```
+pip install PyPDF2 tkinter pathlib img2pdf Pillow docx2pdf fpdf
+```
+
 ## Usage
 To use PDFMerge, run the main.py script. If the libraries are installed in a venv, follow the instruction in the file "execute.txt".
 
