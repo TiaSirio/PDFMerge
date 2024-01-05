@@ -40,4 +40,4 @@ You can also merge other file formats, such as DOCX, images and txt.
 
 ## Author 🧑🏻‍💻
 
-- Mattia Siriani
+- [TiaSirio](https://www.github.com/TiaSirio)
