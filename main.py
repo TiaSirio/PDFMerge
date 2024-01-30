@@ -1,3 +1,4 @@
+import sys
 import PyPDF2
 import tkinter as tk
 import tkinter.filedialog as fd
@@ -8,6 +9,50 @@ from PIL import Image
 from docx2pdf import convert
 from fpdf import FPDF
 import os
+
+
+def Selector(data):
+    def append(widget, element, results, display):
+        # append element to list
+        results.append(element)
+
+        # disable button
+        widget['state'] = 'disabled'
+
+        # add element to label
+        current = display['text']
+        if current:
+            current += '\n'
+        display['text'] = current + element
+
+    # create window
+    root = tk.Tk()
+
+    # list for correct order
+    results = []
+
+    # label to display order
+    tk.Label(root, text='Select the files in the desired order').pack()
+    l = tk.Label(root, anchor='w', justify='left')
+    l.pack(fill='x')
+
+    # buttons to select elements
+    tk.Label(root, text='Files to select').pack()
+
+    for d in data:
+        b = tk.Button(root, text=d, anchor='w')
+        b['command'] = lambda w=b, e=d, r=results, d=l: append(w, e, r, d)
+        b.pack(fill='x')
+
+    # button to close window
+    b = tk.Button(root, text='Close', command=root.destroy)
+    b.pack(fill='x', pady=(15, 0))
+
+    # start mainloop
+    root.mainloop()
+
+    return results
+
 
 location = []
 finalLocation = './Merged/MergedPdf.pdf'
@@ -22,9 +67,16 @@ print("Choose the files in order of merging.")
 
 actualPath = pathlib.Path().resolve()
 
-tk.Tk().withdraw()
-filez = fd.askopenfilenames(title='Choose a file', initialdir=actualPath)
+root = tk.Tk()
+root.withdraw()
+filez = fd.askopenfilenames(parent=root, title='Choose your files', initialdir=actualPath)
+root.destroy()
 
+if len(filez) == 0:
+    print("No file Selected.")
+    sys.exit(1)
+
+filez = Selector(filez)
 print(filez)
 
 for f in filez:
@@ -89,15 +141,15 @@ for x in location:
     pdfFile.append(pdfFileTemp)
 
 for x in pdfFile:
-    pdfReaderTemp = PyPDF2.PdfFileReader(x)
+    pdfReaderTemp = PyPDF2.PdfReader(x)
     pdfReader.append(pdfReaderTemp)
 
-pdfWriter = PyPDF2.PdfFileWriter()
+pdfWriter = PyPDF2.PdfWriter()
 
 for x in pdfReader:
-    for pageNum in range(x.numPages):
-        pageObj = x.getPage(pageNum)
-        pdfWriter.addPage(pageObj)
+    for pageNum in range(len(x.pages)):
+        pageObj = x.pages[pageNum]
+        pdfWriter.add_page(pageObj)
 
 pdfOutputFile = open(finalLocation, 'wb')
 pdfWriter.write(pdfOutputFile)
