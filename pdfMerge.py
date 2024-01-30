@@ -54,6 +54,9 @@ def Selector(data):
     return results
 
 
+if not os.path.exists("./Merged/"):
+    os.makedirs("./Merged/")
+
 location = []
 finalLocation = './Merged/MergedPdf.pdf'
 pdfFile = []
